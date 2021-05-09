@@ -29,3 +29,4 @@ webapp.addRoute('/nagatoro-san/subscriptions', async () => {
         subscriptions: await nagatoroSanBot.currentSubscriptions()
     }
 });
+

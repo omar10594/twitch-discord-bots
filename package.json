@@ -8,6 +8,9 @@
   "license": "MIT",
   "private": false,
   "type": "module",
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "dependencies": {
     "array-move": "^3.0.1",
     "discord.js": "^12.5.3",
