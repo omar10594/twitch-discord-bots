@@ -81,7 +81,7 @@ class NagatoroSanBot {
                 if (newState.id == Settings.NAGATORO_SAN_DISCORD_STALK) {
                     if (newState.channel) {
                         await newState.channel.join();
-                        discordUser.send('senpai', {
+                        await discordUser.send('senpai', {
                             files: [{
                                 attachment: 'files/nagatoro.gif'
                             }]
