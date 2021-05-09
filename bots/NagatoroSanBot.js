@@ -2,7 +2,7 @@ import Settings from '../lib/Settings.js';
 import { ClientCredentialsAuthProvider } from 'twitch-auth';
 import { Client as DiscordClient } from "discord.js";
 import { ApiClient as TwitchClient } from 'twitch';
-import { DirectConnectionAdapter, EventSubListener } from 'twitch-eventsub';
+import { EnvPortAdapter, EventSubListener } from 'twitch-eventsub';
 import { NgrokAdapter } from 'twitch-eventsub-ngrok';
 
 class NagatoroSanBot {
@@ -56,15 +56,9 @@ class NagatoroSanBot {
     }
 
     #twitchEventListenerAdapter() {
-        if (Settings.SSL_CERT && Settings.SSL_KEY && Settings.SSL_HOSTNAME) {
+        if (Settings.DOMAIN) {
             console.log('Twitch event listener using SSL');
-            return new DirectConnectionAdapter({
-              hostName: Settings.SSL_HOSTNAME,
-              sslCert: {
-                key: Settings.SSL_KEY,
-                cert: Settings.SSL_CERT
-              }
-            });
+            return new EnvPortAdapter({ hostName: Settings.DOMAIN })
         } else {
             console.log('Twitch event listener using Ngrok');
             return new NgrokAdapter();
