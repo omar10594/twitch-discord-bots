@@ -80,12 +80,12 @@ class NagatoroSanBot {
                 const discordUser = await this._discordClient.users.fetch(Settings.NAGATORO_SAN_DISCORD_STALK);
                 if (newState.id == Settings.NAGATORO_SAN_DISCORD_STALK) {
                     if (newState.channel) {
-                        await newState.channel.join();
                         await discordUser.send('senpai', {
                             files: [{
                                 attachment: 'files/nagatoro.gif'
                             }]
                         });
+                        await newState.channel.join();
                         clearTimeout(leaveTimer);
                         leaveTimer = setTimeout(function() {
                             if (newState.channel) {
