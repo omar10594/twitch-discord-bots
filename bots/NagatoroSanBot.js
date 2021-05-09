@@ -74,13 +74,25 @@ class NagatoroSanBot {
         });
         discordClient.on("warn", console.log);
         discordClient.on("error", console.error);
+        let leaveTimer = null;
         discordClient.on('voiceStateUpdate', async (oldState, newState) => {
             if (Settings.NAGATORO_SAN_DISCORD_STALK) {
                 const discordUser = await this._discordClient.users.fetch(Settings.NAGATORO_SAN_DISCORD_STALK);
                 if (newState.id == Settings.NAGATORO_SAN_DISCORD_STALK) {
                     if (newState.channel) {
                         await newState.channel.join();
-                        discordUser.send(`senpai :smirk:`);
+                        discordUser.send('senpai', {
+                            files: [{
+                                attachment: 'files/nagatoro.gif'
+                            }]
+                        });
+                        clearTimeout(leaveTimer);
+                        leaveTimer = setTimeout(function() {
+                            if (newState.channel) {
+                                newState.channel.leave();
+                            }
+                        }, 20 * 1000);
+
                     } else if (oldState.channel) {
                         await oldState.channel.leave();
                     }
