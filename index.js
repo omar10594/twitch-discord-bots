@@ -2,7 +2,7 @@ import NagatoroSanBot from './bots/NagatoroSanBot.js';
 import Webapp from './lib/Webapp.js';
 
 const nagatoroSanBot = new NagatoroSanBot();
-const webapp = new Webapp();
+// const webapp = new Webapp();
 
 function channelStartedStreamMessage(e) {
     return `El canal ${e.broadcasterDisplayName} ha empezado stream en https://twitch.tv/${e.broadcasterDisplayName}`;
@@ -23,10 +23,10 @@ await nagatoroSanBot.listenChannelEvents('167553789', '353337058271690755', 'Cha
 
 await nagatoroSanBot.listen();
 
-webapp.addRoute('/nagatoro-san/subscriptions', async () => {
-    return {
-        message: 'OK',
-        subscriptions: await nagatoroSanBot.currentSubscriptions()
-    }
-});
+// webapp.addRoute('/nagatoro-san/subscriptions', async () => {
+//     return {
+//         message: 'OK',
+//         subscriptions: await nagatoroSanBot.currentSubscriptions()
+//     }
+// });
 
