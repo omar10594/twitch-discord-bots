@@ -43,13 +43,13 @@ class NagatoroSanBot extends DiscordBot {
 
     async #initDiscordEvents() {
         this.client.on("ready", (_data) => {
-            this.client.user.setActivity(`a senpai `, {type: "WATCHING"}).then((_) => console.log('Bot status assigned'));
+            this.client.user.setActivity(`a senpai `, {type: "WATCHING"});
         });
         if (this.#userIdToStalk) {
             let leaveTimer = null;
             this.client.on('voiceStateUpdate', async (oldState, newState) => {
                 const discordUser = await this.client.users.fetch(this.#userIdToStalk);
-                if (newState.id == this.#userIdToStalk) {
+                if (newState.id === this.#userIdToStalk) {
                     if (newState.channel) {
                         await discordUser.send('senpai', {
                             files: [{
