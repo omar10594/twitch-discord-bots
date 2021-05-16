@@ -4,6 +4,7 @@ import TwitchEventListener from './lib/TwitchEventListener.js';
 import NagatoroSanBot from './bots/NagatoroSanBot.js';
 import KeyargBot from "./bots/KeyargBot.js";
 import IsoNyanBot from "./bots/IsoNyanBot.js";
+import MeguminBot from "./bots/MeguminBot.js";
 
 const twitchClient = new ClientCredentialsTwitchClient({
     clientId: Settings.TWITCH_CLIENT_ID,
@@ -24,10 +25,14 @@ const keyargBot = new KeyargBot({
 const isoNyanBot = new IsoNyanBot({
     token: Settings.ISONYAN_DISCORD_TOKEN,
     eventsListener: twitchEventListener
-})
+});
+const meguminBot = new MeguminBot({
+    token: Settings.MEGUMIN_DISCORD_TOKEN
+});
 
 twitchEventListener.resetSubscriptions();
 
+await meguminBot.init();
 await nagatoroSanBot.init();
 await keyargBot.init();
 await isoNyanBot.init();
