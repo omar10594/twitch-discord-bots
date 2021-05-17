@@ -16,9 +16,8 @@ class NagatoroSanBot extends DiscordBot {
     }
 
     async listenChannelEvents(twitchUserId, discordUserId, event, messageCallback) {
-        const discordUser = await this.client.users.fetch(discordUserId);
-
-        await this.#eventsListener[`subscribeTo${event}Events`](twitchUserId, (e) => {
+        await this.#eventsListener[`subscribeTo${event}Events`](twitchUserId, async (e) => {
+            const discordUser = await this.client.users.fetch(discordUserId);
             const message = messageCallback(e);
             console.log(`Event ${event} for channel ${e.broadcasterDisplayName} was fired and the message "${message}" was send to ${discordUser.name} discord user`)
             discordUser.send(message);
