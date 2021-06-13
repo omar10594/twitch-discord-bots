@@ -12,7 +12,7 @@ class IsoNyanBot extends DiscordBot {
         await this.#eventsListener.subscribeToStreamOnlineEvents('450122015', async (e) => {
             const channel = await this.client.channels.fetch('607668188703883304');
             console.log(`Event StreamOnline for channel ${e.broadcasterDisplayName} was fired and the discord channel 607668188703883304 will be notified`);
-            channel.send(`Tu waifu preferida @is0nyan-chan esta en directo en https://twitch.tv/${e.broadcasterDisplayName}`)
+            channel.send(`@here Tu waifu preferida is0nyan-chan esta en directo en https://twitch.tv/${e.broadcasterDisplayName}`)
         });
     }
 }
