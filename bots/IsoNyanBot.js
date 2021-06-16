@@ -17,7 +17,7 @@ class IsoNyanBot extends DiscordBot {
     initCommands() {
         super.initCommands();
         this.addCommand({
-            name: 'notifyOnlineStream',
+            name: 'notify_stream',
             description: 'Notificar que un canal inicio directo',
             options: [
                 {
