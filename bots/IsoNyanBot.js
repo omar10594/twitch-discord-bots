@@ -36,6 +36,7 @@ class IsoNyanBot extends DiscordBot {
         }, (interaction, params) => {
             if (interaction.user && interaction.user.id === '353337058271690755') {
                 this.notifyChannelOnline(params.twitch_name.value, params.channel_id.value)
+                interaction.reply(`Se ha enviado la notificacion.`);
             } else {
                 interaction.reply(`Solamente <@353337058271690755> puede utilizar este comando`);
             }
