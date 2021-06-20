@@ -24,7 +24,8 @@ const keyargBot = new KeyargBot({
 });
 const isoNyanBot = new IsoNyanBot({
     token: Settings.ISONYAN_DISCORD_TOKEN,
-    eventsListener: twitchEventListener
+    eventsListener: twitchEventListener,
+    twitchClient: twitchClient
 });
 const meguminBot = new MeguminBot({
     token: Settings.MEGUMIN_DISCORD_TOKEN

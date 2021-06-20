@@ -2,10 +2,12 @@ import DiscordBot from "../lib/DiscordBot.js";
 
 class IsoNyanBot extends DiscordBot {
     #eventsListener;
+    #twitchClient;
 
-    constructor({ token, eventsListener }) {
+    constructor({ token, eventsListener, twitchClient }) {
         super({ token });
         this.#eventsListener = eventsListener;
+        this.#twitchClient = twitchClient;
     }
 
     async init() {
@@ -36,12 +38,32 @@ class IsoNyanBot extends DiscordBot {
                     required: true
                 }
             ]
-        }, (interaction, params) => {
+        }, async (interaction, params) => {
             if (interaction.user && interaction.user.id === '353337058271690755') {
                 this.notifyChannelOnline(params.twitch_name.value, params.channel_id.value)
                 interaction.reply(`Se ha enviado la notificacion.`);
             } else {
                 interaction.reply(`Solamente <@353337058271690755> puede utilizar este comando`);
+            }
+        });
+        this.addCommand({
+            name: 'twitch_id',
+            description: 'Obtener el id de un canal de twitch en base al nombre',
+            options: [
+                {
+                    name: 'twitch_name',
+                    type: 'STRING',
+                    description: 'Nombre del canal de twitch',
+                    required: true
+                }
+            ]
+        }, async (interaction, params) => {
+            await interaction.defer();
+            const twitch_user = await this.#twitchClient.helix.users.getUserByName(params.twitch_name.value);
+            if (twitch_user) {
+                interaction.reply(`El ID del canal ${twitch_user.display_name} es: ${twitch_user.id}`);
+            } else {
+                interaction.reply(`No se encontro el canal ${params.twitch_name.value} en twitch`);
             }
         });
     }
