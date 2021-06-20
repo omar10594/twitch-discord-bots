@@ -12,6 +12,9 @@ class IsoNyanBot extends DiscordBot {
         await this.#eventsListener.subscribeToStreamOnlineEvents('450122015', (e) => {
             this.notifyChannelOnline(e.broadcasterDisplayName, '607668188703883304');
         });
+        await this.#eventsListener.subscribeToStreamOnlineEvents('588172486', (e) => {
+            this.notifyChannelOnline(e.broadcasterDisplayName, '607668188703883304');
+        });
     }
 
     initCommands() {
