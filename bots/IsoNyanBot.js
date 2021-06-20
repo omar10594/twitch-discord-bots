@@ -61,7 +61,7 @@ class IsoNyanBot extends DiscordBot {
             await interaction.defer();
             const twitch_user = await this.#twitchClient.helix.users.getUserByName(params.twitch_name.value);
             if (twitch_user) {
-                interaction.editReply(`El ID del canal ${twitch_user.display_name} es: ${twitch_user.id}`);
+                interaction.editReply(`El ID del canal ${twitch_user.displayName} es: ${twitch_user.id}`);
             } else {
                 interaction.editReply(`No se encontro el canal ${params.twitch_name.value} en twitch`);
             }
