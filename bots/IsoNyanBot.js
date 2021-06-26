@@ -66,6 +66,17 @@ class IsoNyanBot extends DiscordBot {
                 interaction.editReply(`No se encontro el canal ${params.twitch_name.value} en twitch`);
             }
         });
+        this.addCommand({
+            name: 'twitch_events',
+            description: 'Eventos registrados en twitch'
+        }, async (interaction) => {
+            await interaction.defer();
+            const subscribedEvents = await this.#twitchClient.helix.eventSub.getSubscriptions();
+            let subscriptions = subscribedEvents.data.map((subscribedEvent) => {
+                return `\`status:\` ${subscribedEvent.status} \`type:\` ${subscribedEvent.type} \`condition:\` ${JSON.stringify(subscribedEvent.condition)}`;
+            });
+            return interaction.editReply(subscriptions.join('\n'));
+        });
     }
 
     notifyChannelOnline(twitchName, discordChannel) {
