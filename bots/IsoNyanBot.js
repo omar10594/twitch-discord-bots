@@ -1,11 +1,14 @@
-import DiscordBot from "../lib/DiscordBot.js";
+const DiscordBot = require('../lib/DiscordBot');
+const {
+    ISONYAN_DISCORD_TOKEN
+} = require('../lib/Settings');
 
 class IsoNyanBot extends DiscordBot {
     #eventsListener;
     #twitchClient;
 
-    constructor({ token, eventsListener, twitchClient }) {
-        super({ token });
+    constructor({ eventsListener, twitchClient }) {
+        super({ token: ISONYAN_DISCORD_TOKEN });
         this.#eventsListener = eventsListener;
         this.#twitchClient = twitchClient;
     }
@@ -90,4 +93,4 @@ class IsoNyanBot extends DiscordBot {
     }
 }
 
-export default IsoNyanBot;
+module.exports = IsoNyanBot;

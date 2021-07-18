@@ -1,41 +1,28 @@
-import Settings from './lib/Settings.js';
-import ClientCredentialsTwitchClient from './lib/ClientCredentialsTwitchClient.js';
-import TwitchEventListener from './lib/TwitchEventListener.js';
-import NagatoroSanBot from './bots/NagatoroSanBot.js';
-import KeyargBot from "./bots/KeyargBot.js";
-import IsoNyanBot from "./bots/IsoNyanBot.js";
-import MeguminBot from "./bots/MeguminBot.js";
+require('dotenv').config()
 
-const twitchClient = new ClientCredentialsTwitchClient({
-    clientId: Settings.TWITCH_CLIENT_ID,
-    clientSecret: Settings.TWITCH_CLIENT_SECRET
-});
-const twitchEventListener = new TwitchEventListener({
-    client: twitchClient,
-    domain: Settings.DOMAIN
-});
-const nagatoroSanBot = new NagatoroSanBot({
-    token: Settings.NAGATORO_SAN_DISCORD_TOKEN,
-    eventsListener: twitchEventListener,
-    userIdToStalk: Settings.NAGATORO_SAN_DISCORD_STALK
-});
-const keyargBot = new KeyargBot({
-    token: Settings.KEYARG_DISCORD_TOKEN
-});
-const isoNyanBot = new IsoNyanBot({
-    token: Settings.ISONYAN_DISCORD_TOKEN,
-    eventsListener: twitchEventListener,
-    twitchClient: twitchClient
-});
-const meguminBot = new MeguminBot({
-    token: Settings.MEGUMIN_DISCORD_TOKEN
-});
+const ClientCredentialsTwitchClient = require('./lib/ClientCredentialsTwitchClient');
+const TwitchEventListener = require('./lib/TwitchEventListener')
+const {
+  NagatoroSanBot,
+  KeyargBot,
+  IsoNyanBot,
+  MeguminBot
+} = require('./bots');
 
-twitchEventListener.resetSubscriptions();
+const twitchClient = new ClientCredentialsTwitchClient();
+const twitchEventListener = new TwitchEventListener({ client: twitchClient });
+const nagatoroSanBot = new NagatoroSanBot({ eventsListener: twitchEventListener });
+const isoNyanBot = new IsoNyanBot({ eventsListener: twitchEventListener, twitchClient: twitchClient });
+const meguminBot = new MeguminBot();
+const keyargBot = new KeyargBot();
 
-await meguminBot.init();
-await nagatoroSanBot.init();
-await keyargBot.init();
-await isoNyanBot.init();
+(async () => {
+  await twitchEventListener.resetSubscriptions();
 
-twitchEventListener.listen();
+  await meguminBot.init();
+  await nagatoroSanBot.init();
+  await keyargBot.init();
+  await isoNyanBot.init();
+
+  await twitchEventListener.listen();
+})();

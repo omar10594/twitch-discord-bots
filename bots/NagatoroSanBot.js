@@ -1,13 +1,17 @@
-import DiscordBot from "../lib/DiscordBot.js";
+const DiscordBot = require('../lib/DiscordBot');
+const {
+    NAGATORO_SAN_DISCORD_TOKEN,
+    NAGATORO_SAN_DISCORD_STALK,
+} = require('../lib/Settings');
 
 class NagatoroSanBot extends DiscordBot {
     #eventsListener;
     #userIdToStalk;
 
-    constructor({ token, eventsListener, userIdToStalk }) {
-        super({ token });
+    constructor({ eventsListener }) {
+        super({ token: NAGATORO_SAN_DISCORD_TOKEN });
         this.#eventsListener = eventsListener;
-        this.#userIdToStalk = userIdToStalk;
+        this.#userIdToStalk = NAGATORO_SAN_DISCORD_STALK;
     }
 
     async init() {
@@ -72,4 +76,4 @@ class NagatoroSanBot extends DiscordBot {
     }
 }
 
-export default NagatoroSanBot;
+module.exports = NagatoroSanBot;
