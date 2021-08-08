@@ -15,41 +15,38 @@ class IsoNyanBot extends DiscordBot {
 
     async init() {
         await this.#eventsListener.subscribeToStreamOnlineEvents('450122015', (e) => {
-            this.notifyChannelOnline(e.broadcasterDisplayName, '607668188703883304');
+            const channel = this.client.channels.cache.get('607668188703883304');
+            if (channel) {
+                channel.send(`@here ${e.broadcasterDisplayName} esta en directo en https://twitch.tv/${e.broadcasterDisplayName}`);
+            }
         });
         await this.#eventsListener.subscribeToStreamOnlineEvents('588172486', (e) => {
-            this.notifyChannelOnline(e.broadcasterDisplayName, '607668188703883304');
+            const channel = this.client.channels.cache.get('607668188703883304');
+            if (channel) {
+                channel.send(`@here ${e.broadcasterDisplayName} esta en directo en https://twitch.tv/${e.broadcasterDisplayName}`);
+            }
         });
     }
 
-    initCommands() {
-        super.initCommands();
-        this.addCommand({
-            name: 'notify_stream',
+    async initCommands() {
+        await super.initCommands();
+        await this.addAdminCommand({
+            name: 'stream',
             description: 'Notificar que un canal inicio directo',
             options: [
                 {
-                    name: 'twitch_name',
+                    name: 'canal',
                     type: 'STRING',
                     description: 'Nombre del canal de twitch',
                     required: true
-                },
-                {
-                    name: 'channel_id',
-                    type: 'STRING',
-                    description: 'El id del canal donde notificar',
-                    required: true
                 }
             ]
-        }, async (interaction, params) => {
-            if (interaction.user && interaction.user.id === '353337058271690755') {
-                this.notifyChannelOnline(params.twitch_name.value, params.channel_id.value)
-                interaction.reply(`Se ha enviado la notificacion.`);
-            } else {
-                interaction.reply(`Solamente <@353337058271690755> puede utilizar este comando`);
-            }
+        }, async (interaction) => {
+            await interaction.deferReply({ ephemeral: true });
+            await interaction.channel.send(`@here ${interaction.options.getString('canal')} esta en directo en https://twitch.tv/${interaction.options.getString('canal')}`);
+            await interaction.editReply({ content: `Se ha enviado la notificacion.`, ephemeral: true });
         });
-        this.addCommand({
+        await this.addCommand({
             name: 'twitch_id',
             description: 'Obtener el id de un canal de twitch en base al nombre',
             options: [
@@ -60,36 +57,26 @@ class IsoNyanBot extends DiscordBot {
                     required: true
                 }
             ]
-        }, async (interaction, params) => {
-            await interaction.defer();
-            const twitch_user = await this.#twitchClient.helix.users.getUserByName(params.twitch_name.value);
+        }, async (interaction) => {
+            await interaction.deferReply({ ephemeral: true });
+            const twitch_user = await this.#twitchClient.helix.users.getUserByName(interaction.options.getString('twitch_name'));
             if (twitch_user) {
-                interaction.editReply(`El ID del canal ${twitch_user.displayName} es: ${twitch_user.id}`);
+                await interaction.editReply({ content: `El ID del canal ${twitch_user.displayName} es: \`${twitch_user.id}\``, ephemeral: true });
             } else {
-                interaction.editReply(`No se encontro el canal ${params.twitch_name.value} en twitch`);
+                await interaction.editReply({ content: `No se encontro el canal ${interaction.options.getString('twitch_name')} en twitch`, ephemeral: true });
             }
         });
-        this.addCommand({
+        await this.addAdminCommand({
             name: 'twitch_events',
             description: 'Eventos registrados en twitch'
         }, async (interaction) => {
-            await interaction.defer();
+            await interaction.deferReply({ ephemeral: true });
             const subscribedEvents = await this.#twitchClient.helix.eventSub.getSubscriptions();
             let subscriptions = subscribedEvents.data.map((subscribedEvent) => {
                 return `\`status:\` ${subscribedEvent.status} \`type:\` ${subscribedEvent.type} \`condition:\` ${JSON.stringify(subscribedEvent.condition)}`;
             });
-            return interaction.editReply(subscriptions.join('\n'));
+            await interaction.editReply({ content: subscriptions.join('\n'), ephemeral: true });
         });
-    }
-
-    notifyChannelOnline(twitchName, discordChannel) {
-        console.log(`Notification for online channel ${twitchName} was fired and the discord channel ${discordChannel} will be notified`);
-        const channel = this.client.channels.cache.get(discordChannel);
-        if (channel) {
-            channel.send(`@here ${twitchName} esta en directo en https://twitch.tv/${twitchName}`);
-        } else {
-            console.error(`Notification error for channel ${twitchName}: channel ${discordChannel} not in cache`);
-        }
     }
 }
 
