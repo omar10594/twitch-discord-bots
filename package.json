@@ -37,7 +37,7 @@
     "ytdl-core": "^4.7.0"
   },
   "scripts": {
-    "start": "npx sequelize-cli db:migrate && node index.js",
+    "start": "node index.js",
     "build": "npx sequelize-cli db:migrate",
     "sq": "npx sequelize-cli"
   }
