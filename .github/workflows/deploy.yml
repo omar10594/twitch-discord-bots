@@ -15,6 +15,6 @@ jobs:
           username: ${{secrets.SSH_USERNAME}}
           script: |
             cd ~/apps/twitch-discord-bots
-            git reset --hard $GITHUB_SHA
+            git pull
             yarn install
             echo 'Deployment sucessful to digital ocean'
