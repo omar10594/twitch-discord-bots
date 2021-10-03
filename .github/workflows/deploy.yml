@@ -14,9 +14,10 @@ jobs:
           key: ${{secrets.SSH_KEY}}
           username: ${{secrets.SSH_USERNAME}}
           script: |
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
             cd ~/apps/twitch-discord-bots
             git pull
-            exec bash
             yarn install
             pm2 reload index.js
             echo 'Deployment sucessful to digital ocean'
