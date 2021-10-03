@@ -16,4 +16,5 @@ jobs:
           script: |
             cd ~/apps/twitch-discord-bots
             git reset --hard $GITHUB_SHA
+            yarn install
             echo 'Deployment sucessful to digital ocean'

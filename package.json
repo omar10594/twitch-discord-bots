@@ -6,7 +6,6 @@
   "repository": "https://github.com/omar10594/twitch-discord-bots",
   "author": "omar10504 <omar10594@hotmail.com>",
   "license": "MIT",
-  "private": false,
   "engines": {
     "node": ">=16.6.0"
   },
@@ -38,7 +37,8 @@
   },
   "scripts": {
     "start": "node index.js",
-    "build": "npx sequelize-cli db:migrate",
+    "build": "yarn install",
+    "migrate": "npx sequelize-cli db:migrate",
     "sq": "npx sequelize-cli"
   }
 }
