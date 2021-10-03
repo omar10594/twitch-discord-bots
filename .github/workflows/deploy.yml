@@ -16,5 +16,6 @@ jobs:
           script: |
             cd ~/apps/twitch-discord-bots
             git pull
+            printenv PATH
             yarn install
             echo 'Deployment sucessful to digital ocean'
