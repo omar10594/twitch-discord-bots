@@ -15,5 +15,5 @@ jobs:
           username: ${{secrets.SSH_USERNAME}}
           script: |
             cd ~/apps/twitch-discord-bots
-            git reset --hard origin/GITHUB_SHA
+            git reset --hard $GITHUB_SHA
             echo 'Deployment sucessful to digital ocean'
