@@ -73,7 +73,7 @@ class IsoNyanBot extends DiscordBot {
             await interaction.deferReply({ ephemeral: true });
             const subscribedEvents = await this.#twitchClient.helix.eventSub.getSubscriptions();
             let subscriptions = subscribedEvents.data.map((subscribedEvent) => {
-                return `\`status:\` ${subscribedEvent.status} \`type:\` ${subscribedEvent.type} \`condition:\` ${JSON.stringify(subscribedEvent.condition)} \`transport:\` ${JSON.stringify(subscribedEvent.transport)}`;
+                return `\`status:\` ${subscribedEvent.status} \`type:\` ${subscribedEvent.type} \`condition:\` ${JSON.stringify(subscribedEvent.condition)} \`transport:\` ${JSON.stringify(subscribedEvent._transport)}`;
             });
             await interaction.editReply({ content: subscriptions.join('\n'), ephemeral: true });
         });

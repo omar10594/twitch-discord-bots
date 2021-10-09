@@ -1,4 +1,13 @@
 const DiscordBot = require('../lib/DiscordBot');
+const { createReadStream } = require('fs');
+const {
+    joinVoiceChannel,
+    VoiceConnectionStatus,
+    createAudioPlayer,
+    createAudioResource,
+    StreamType,
+    AudioPlayerStatus
+} = require('@discordjs/voice');
 const {
     NAGATORO_SAN_DISCORD_TOKEN,
     NAGATORO_SAN_DISCORD_STALK,
@@ -7,11 +16,15 @@ const {
 class NagatoroSanBot extends DiscordBot {
     #eventsListener;
     #userIdToStalk;
+    #ganbareSenpaiResource;
+    #audioPlayer;
 
     constructor({ eventsListener }) {
         super({ token: NAGATORO_SAN_DISCORD_TOKEN });
         this.#eventsListener = eventsListener;
         this.#userIdToStalk = NAGATORO_SAN_DISCORD_STALK;
+        this.#ganbareSenpaiResource = createAudioResource('files/audios/full_nagatoro_ganbare_ganbare_senpai.ogg');
+        this.#audioPlayer = createAudioPlayer();
     }
 
     async init() {
@@ -54,21 +67,28 @@ class NagatoroSanBot extends DiscordBot {
                 const discordUser = await this.client.users.fetch(this.#userIdToStalk);
                 if (newState.id === this.#userIdToStalk) {
                     if (newState.channel) {
-                        await discordUser.send('senpai', {
+                        await discordUser.send({
+                            content: 'senpai',
                             files: [{
                                 attachment: 'files/nagatoro.gif'
                             }]
                         });
-                        await newState.channel.join();
+                        const connection = joinVoiceChannel({
+                            channelId: newState.channel.id,
+                            guildId: newState.channel.guild.id,
+                            adapterCreator: newState.channel.guild.voiceAdapterCreator
+                        });
+                        connection.subscribe(this.#audioPlayer);
                         clearTimeout(leaveTimer);
-                        leaveTimer = setTimeout(function() {
-                            if (newState.channel) {
-                                newState.channel.leave();
-                            }
-                        }, 20 * 1000);
-
+                        connection.on(VoiceConnectionStatus.Ready, () => {
+                            this.#audioPlayer.play(this.#ganbareSenpaiResource);
+                            leaveTimer = setTimeout(() => {
+                                this.#audioPlayer.stop();
+                                connection.destroy();
+                            }, 20 * 1000);
+                        });
                     } else if (oldState.channel) {
-                        await oldState.channel.leave();
+                        await oldState.disconnect();
                     }
                 }
             });
