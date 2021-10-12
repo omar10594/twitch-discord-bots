@@ -23,8 +23,6 @@ class NagatoroSanBot extends DiscordBot {
         super({ token: NAGATORO_SAN_DISCORD_TOKEN });
         this.#eventsListener = eventsListener;
         this.#userIdToStalk = NAGATORO_SAN_DISCORD_STALK;
-        this.#ganbareSenpaiResource = createAudioResource(__dirname + '/../files/audios/full_nagatoro_ganbare_ganbare_senpai.ogg');
-        this.#audioPlayer = createAudioPlayer();
     }
 
     async init() {
@@ -57,12 +55,13 @@ class NagatoroSanBot extends DiscordBot {
         });
     }
 
+    initDiscordComponents() {
+        this.client.user.setActivity(`a senpai `, {type: "WATCHING"});
+        this.#audioPlayer = createAudioPlayer();
+    }
+
     async #initDiscordEvents() {
-        this.client.on("ready", (_data) => {
-            this.client.user.setActivity(`a senpai `, {type: "WATCHING"});
-        });
         if (this.#userIdToStalk) {
-            let leaveTimer = null;
             this.client.on('voiceStateUpdate', async (oldState, newState) => {
                 const discordUser = await this.client.users.fetch(this.#userIdToStalk);
                 if (newState.id === this.#userIdToStalk) {
@@ -89,10 +88,10 @@ class NagatoroSanBot extends DiscordBot {
             guildId: channel.guild.id,
             adapterCreator: channel.guild.voiceAdapterCreator
         });
-        connection.subscribe(this.#audioPlayer);
         clearTimeout(leaveTimer);
         return connection.on(VoiceConnectionStatus.Ready, () => {
-            this.#audioPlayer.play(this.#ganbareSenpaiResource);
+            this.#audioPlayer.play(createAudioResource(__dirname + '/../files/audios/simple_ganbare_ganbare_senpai.ogg'));
+            connection.subscribe(this.#audioPlayer);
             leaveTimer = setTimeout(() => {
                 this.#audioPlayer.stop();
                 connection.destroy();

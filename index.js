@@ -8,6 +8,7 @@ const {
   IsoNyanBot,
   MeguminBot
 } = require('./bots');
+const { generateDependencyReport } = require('@discordjs/voice');
 
 const twitchClient = new ClientCredentialsTwitchClient();
 const twitchEventListener = new TwitchEventListener({ client: twitchClient });
@@ -17,6 +18,8 @@ const meguminBot = new MeguminBot();
 const keyargBot = new KeyargBot();
 
 (async () => {
+  console.log(generateDependencyReport());
+
   await twitchEventListener.resetSubscriptions();
 
   await meguminBot.init();

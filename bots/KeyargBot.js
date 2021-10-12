@@ -8,10 +8,11 @@ class KeyargBot extends DiscordBot {
         super({ token: KEYARG_DISCORD_TOKEN });
     }
 
+    initDiscordComponents() {
+        this.client.user.setActivity(`osu!`, {type: "PLAYING"});
+    }
+
     async init() {
-        this.client.on("ready", (_data) => {
-            this.client.user.setActivity(`osu!`, {type: "PLAYING"});
-        });
     }
 }
 

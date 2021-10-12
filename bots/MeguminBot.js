@@ -8,10 +8,11 @@ class MeguminBot extends DiscordBot {
         super({ token: MEGUMIN_DISCORD_TOKEN });
     }
 
+    initDiscordComponents() {
+        this.client.user.setActivity(`Explosioooon!!!`, { type: "LISTENING" });
+    }
+
     async init() {
-        this.client.on("ready", (_data) => {
-            this.client.user.setActivity(`Explosioooon!!!`, { type: "LISTENING" });
-        });
     }
 }
 
