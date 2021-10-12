@@ -23,7 +23,7 @@ class NagatoroSanBot extends DiscordBot {
         super({ token: NAGATORO_SAN_DISCORD_TOKEN });
         this.#eventsListener = eventsListener;
         this.#userIdToStalk = NAGATORO_SAN_DISCORD_STALK;
-        this.#ganbareSenpaiResource = createAudioResource('files/audios/full_nagatoro_ganbare_ganbare_senpai.ogg');
+        this.#ganbareSenpaiResource = createAudioResource(__dirname + '/../files/audios/full_nagatoro_ganbare_ganbare_senpai.ogg');
         this.#audioPlayer = createAudioPlayer();
     }
 
@@ -70,7 +70,7 @@ class NagatoroSanBot extends DiscordBot {
                         await discordUser.send({
                             content: 'senpai',
                             files: [{
-                                attachment: 'files/nagatoro.gif'
+                                attachment: __dirname + '/../files/nagatoro.gif'
                             }]
                         });
                         await this.joinChannel(newState.channel)
