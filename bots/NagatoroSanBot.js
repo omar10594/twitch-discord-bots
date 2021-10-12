@@ -73,26 +73,51 @@ class NagatoroSanBot extends DiscordBot {
                                 attachment: 'files/nagatoro.gif'
                             }]
                         });
-                        const connection = joinVoiceChannel({
-                            channelId: newState.channel.id,
-                            guildId: newState.channel.guild.id,
-                            adapterCreator: newState.channel.guild.voiceAdapterCreator
-                        });
-                        connection.subscribe(this.#audioPlayer);
-                        clearTimeout(leaveTimer);
-                        connection.on(VoiceConnectionStatus.Ready, () => {
-                            this.#audioPlayer.play(this.#ganbareSenpaiResource);
-                            leaveTimer = setTimeout(() => {
-                                this.#audioPlayer.stop();
-                                connection.destroy();
-                            }, 20 * 1000);
-                        });
+                        await this.joinChannel(newState.channel)
                     } else if (oldState.channel) {
                         await oldState.disconnect();
                     }
                 }
             });
         }
+    }
+
+    async joinChannel(channel) {
+        let leaveTimer = null;
+        const connection = joinVoiceChannel({
+            channelId: channel.id,
+            guildId: channel.guild.id,
+            adapterCreator: channel.guild.voiceAdapterCreator
+        });
+        connection.subscribe(this.#audioPlayer);
+        clearTimeout(leaveTimer);
+        return connection.on(VoiceConnectionStatus.Ready, () => {
+            this.#audioPlayer.play(this.#ganbareSenpaiResource);
+            leaveTimer = setTimeout(() => {
+                this.#audioPlayer.stop();
+                connection.destroy();
+            }, 20 * 1000);
+        });
+    }
+
+    async initCommands() {
+        await super.initCommands();
+        await this.addAdminCommand({
+            name: 'unirse',
+            description: 'Unirse a un canal de voz',
+            options: [
+                {
+                    name: 'canal',
+                    type: 'CHANNEL',
+                    description: 'Canal al que se debe unir',
+                    required: true
+                }
+            ]
+        }, async (interaction) => {
+            await interaction.deferReply({ ephemeral: true });
+            await this.joinChannel(interaction.options.getChannel('canal'))
+            await interaction.editReply({ content: `Se ha unido al canal.`, ephemeral: true });
+        });
     }
 }
 
