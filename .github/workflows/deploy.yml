@@ -19,5 +19,5 @@ jobs:
             cd ~/apps/twitch-discord-bots
             git pull
             yarn install
-            pm2 reload twitch-discord-bots
+            pm2 reload twitch-discord-bots --update-env
             echo 'Deployment sucessful to digital ocean'
