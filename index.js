@@ -6,7 +6,8 @@ const {
   NagatoroSanBot,
   KeyargBot,
   IsoNyanBot,
-  MeguminBot
+  MeguminBot,
+  MayuBot,
 } = require('./bots');
 const { generateDependencyReport } = require('@discordjs/voice');
 
@@ -16,6 +17,7 @@ const nagatoroSanBot = new NagatoroSanBot({ eventsListener: twitchEventListener 
 const isoNyanBot = new IsoNyanBot({ eventsListener: twitchEventListener, twitchClient: twitchClient });
 const meguminBot = new MeguminBot();
 const keyargBot = new KeyargBot();
+const mayuBot = new MayuBot({ eventsListener: twitchEventListener, twitchClient: twitchClient });
 
 (async () => {
   console.log(generateDependencyReport());
@@ -26,6 +28,7 @@ const keyargBot = new KeyargBot();
   await nagatoroSanBot.init();
   await keyargBot.init();
   await isoNyanBot.init();
+  await mayuBot.init();
 
   await twitchEventListener.listen();
 })();
