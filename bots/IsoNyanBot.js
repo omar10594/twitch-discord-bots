@@ -15,13 +15,13 @@ class IsoNyanBot extends DiscordBot {
 
     async init() {
         await this.#eventsListener.subscribeToStreamOnlineEvents('450122015', (e) => {
-            const channel = this.client.channels.cache.get('607668188703883304');
+            const channel = this.client.channels.cache.get('923758743257235546');
             if (channel) {
                 channel.send(`@here ${e.broadcasterDisplayName} esta en directo en https://twitch.tv/${e.broadcasterDisplayName}`);
             }
         });
         await this.#eventsListener.subscribeToStreamOnlineEvents('588172486', (e) => {
-            const channel = this.client.channels.cache.get('607668188703883304');
+            const channel = this.client.channels.cache.get('923758743257235546');
             if (channel) {
                 channel.send(`@here ${e.broadcasterDisplayName} esta en directo en https://twitch.tv/${e.broadcasterDisplayName}`);
             }
