@@ -18,7 +18,7 @@ class MayuBot extends DiscordBot {
     async init() {
         await this.#eventsListener.subscribeToStreamOnlineEvents('731516958', (e) => {
             if (this.#twitchChannel) {
-                this.#twitchChannel.send(`@here ${e.broadcasterDisplayName} esta en directo en https://twitch.tv/${e.broadcasterDisplayName}`);
+                this.#twitchChannel.send(`@here ${e.broadcasterDisplayName} is now live on https://twitch.tv/${e.broadcasterDisplayName}`);
             }
         });
     }
