@@ -49,10 +49,7 @@ class NagatoroSanBot extends DiscordBot {
         await this.listenChannelEvents('142110121', '353337058271690755', 'StreamOnline', channelStartedStreamMessage);
         await this.listenChannelEvents('227353789', '353337058271690755', 'StreamOnline', channelStartedStreamMessage);
         await this.listenChannelEvents('462742579', '353337058271690755', 'StreamOnline', channelStartedStreamMessage);
-        await this.listenChannelEvents('511200875', '353337058271690755', 'StreamOnline', channelStartedStreamMessage);
-        await this.listenChannelEvents('167553789', '353337058271690755', 'ChannelUpdate', (e) => {
-            return 'Asi que actualizaste la informacion de tu stream senpai :smirk:'
-        });
+        await this.listenChannelEvents('557278386', '353337058271690755', 'StreamOnline', channelStartedStreamMessage);
     }
 
     initDiscordComponents() {
