@@ -66,6 +66,26 @@ class IsoNyanBot extends DiscordBot {
                 await interaction.editReply({ content: `No se encontro el canal ${interaction.options.getString('twitch_name')} en twitch`, ephemeral: true });
             }
         });
+        await this.addCommand({
+            name: 'twitch_name',
+            description: 'Obtener el nombre de un canal de twitch en base al id',
+            options: [
+                {
+                    name: 'twitch_id',
+                    type: 'STRING',
+                    description: 'ID del canal de twitch',
+                    required: true
+                }
+            ]
+        }, async (interaction) => {
+            await interaction.deferReply({ ephemeral: true });
+            const twitch_user = await this.#twitchClient.helix.users.getUserById(interaction.options.getString('twitch_id'));
+            if (twitch_user) {
+                await interaction.editReply({ content: `El name del canal ${twitch_user.displayName} es: \`${twitch_user.name}\``, ephemeral: true });
+            } else {
+                await interaction.editReply({ content: `No se encontro el canal ${interaction.options.getString('twitch_id')} en twitch`, ephemeral: true });
+            }
+        });
         await this.addAdminCommand({
             name: 'twitch_events',
             description: 'Eventos registrados en twitch'
