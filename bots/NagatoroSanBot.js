@@ -16,7 +16,6 @@ const {
 class NagatoroSanBot extends DiscordBot {
     #eventsListener;
     #userIdToStalk;
-    #ganbareSenpaiResource;
     #audioPlayer;
 
     constructor({ eventsListener }) {
@@ -26,7 +25,6 @@ class NagatoroSanBot extends DiscordBot {
     }
 
     async init() {
-        await this.#initDiscordEvents();
         await this.#initTwitchEvents();
     }
 
@@ -46,75 +44,52 @@ class NagatoroSanBot extends DiscordBot {
             return `El canal ${e.broadcasterDisplayName} ha empezado stream en https://twitch.tv/${e.broadcasterDisplayName}`;
         }
 
-        await this.listenChannelEvents('142110121', '353337058271690755', 'StreamOnline', channelStartedStreamMessage);
         await this.listenChannelEvents('227353789', '353337058271690755', 'StreamOnline', channelStartedStreamMessage);
         await this.listenChannelEvents('462742579', '353337058271690755', 'StreamOnline', channelStartedStreamMessage);
         await this.listenChannelEvents('557278386', '353337058271690755', 'StreamOnline', channelStartedStreamMessage);
     }
 
-    initDiscordComponents() {
-        this.client.user.setActivity(`a senpai `, {type: "WATCHING"});
-        this.#audioPlayer = createAudioPlayer();
-    }
+    // initDiscordComponents() {
+    //     this.#audioPlayer = createAudioPlayer();
+    // }
 
-    async #initDiscordEvents() {
-        if (this.#userIdToStalk) {
-            this.client.on('voiceStateUpdate', async (oldState, newState) => {
-                const discordUser = await this.client.users.fetch(this.#userIdToStalk);
-                if (newState.id === this.#userIdToStalk) {
-                    if (newState.channel) {
-                        await discordUser.send({
-                            content: 'senpai',
-                            files: [{
-                                attachment: __dirname + '/../files/nagatoro.gif'
-                            }]
-                        });
-                        await this.joinChannel(newState.channel)
-                    } else if (oldState.channel) {
-                        await oldState.disconnect();
-                    }
-                }
-            });
-        }
-    }
-
-    async joinChannel(channel) {
-        let leaveTimer = null;
-        const connection = joinVoiceChannel({
-            channelId: channel.id,
-            guildId: channel.guild.id,
-            adapterCreator: channel.guild.voiceAdapterCreator
-        });
-        clearTimeout(leaveTimer);
-        return connection.on(VoiceConnectionStatus.Ready, () => {
-            this.#audioPlayer.play(createAudioResource(__dirname + '/../files/audios/simple_ganbare_ganbare_senpai.ogg'));
-            connection.subscribe(this.#audioPlayer);
-            leaveTimer = setTimeout(() => {
-                this.#audioPlayer.stop();
-                connection.destroy();
-            }, 20 * 1000);
-        });
-    }
-
-    async initCommands() {
-        await super.initCommands();
-        await this.addAdminCommand({
-            name: 'unirse',
-            description: 'Unirse a un canal de voz',
-            options: [
-                {
-                    name: 'canal',
-                    type: 'CHANNEL',
-                    description: 'Canal al que se debe unir',
-                    required: true
-                }
-            ]
-        }, async (interaction) => {
-            await interaction.deferReply({ ephemeral: true });
-            await this.joinChannel(interaction.options.getChannel('canal'))
-            await interaction.editReply({ content: `Se ha unido al canal.`, ephemeral: true });
-        });
-    }
+    // async joinChannel(channel) {
+    //     let leaveTimer = null;
+    //     const connection = joinVoiceChannel({
+    //         channelId: channel.id,
+    //         guildId: channel.guild.id,
+    //         adapterCreator: channel.guild.voiceAdapterCreator
+    //     });
+    //     clearTimeout(leaveTimer);
+    //     return connection.on(VoiceConnectionStatus.Ready, () => {
+    //         this.#audioPlayer.play(createAudioResource(__dirname + 'FILE'));
+    //         connection.subscribe(this.#audioPlayer);
+    //         leaveTimer = setTimeout(() => {
+    //             this.#audioPlayer.stop();
+    //             connection.destroy();
+    //         }, 20 * 1000);
+    //     });
+    // }
+    //
+    // async initCommands() {
+    //     await super.initCommands();
+    //     await this.addAdminCommand({
+    //         name: 'unirse',
+    //         description: 'Unirse a un canal de voz',
+    //         options: [
+    //             {
+    //                 name: 'canal',
+    //                 type: 'CHANNEL',
+    //                 description: 'Canal al que se debe unir',
+    //                 required: true
+    //             }
+    //         ]
+    //     }, async (interaction) => {
+    //         await interaction.deferReply({ ephemeral: true });
+    //         await this.joinChannel(interaction.options.getChannel('canal'))
+    //         await interaction.editReply({ content: `Se ha unido al canal.`, ephemeral: true });
+    //     });
+    // }
 }
 
 module.exports = NagatoroSanBot;
